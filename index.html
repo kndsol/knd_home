@@ -1,14 +1,12 @@
 <!DOCTYPE HTML>
-<!--
-	Fractal by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 	<head>
 		<title>KND Solution</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
@@ -17,439 +15,273 @@
 		<!-- Header -->
 			<header id="header">
 				<div class="content">
-					<h1><a href="#">KND Solution</a></h1>
-					<p>Easy way to go with KND Solution<br />
-						Knowledge And Developement your way!</p>
+					<div class="logo-container">
+						<h1><a href="#">KND Solution</a></h1>
+						<div class="tagline">Knowledge & Development</div>
+					</div>
+					<p class="hero-description">
+						비즈니스 자동화와 AI 기반 솔루션으로<br />
+						<span class="highlight">혁신적인 개발 환경</span>을 제공합니다
+					</p>
 					<ul class="actions">
-						<li><a href="#one" class="button icon solid fa-chevron-down scrolly">Learn More</a></li>
+						<li><a href="#one" class="button primary icon solid fa-arrow-down scrolly">솔루션 알아보기</a></li>
+						<li><a href="#three" class="button secondary scrolly">회사 소개</a></li>
 					</ul>
 				</div>
-				<div class="image phone"><div class="inner"><img src="images/devops3.webp" alt="" /></div></div>
+				<div class="image phone">
+					<div class="inner">
+						<img src="images/devops3.webp" alt="DevOps Solution" />
+						<div class="image-overlay">
+							<div class="tech-badge">DevOps</div>
+							<div class="tech-badge">AI</div>
+							<div class="tech-badge">TestOps</div>
+						</div>
+					</div>
+				</div>
 			</header>
 
 		<!-- One -->
 			<section id="one" class="wrapper style2 special">
 				<header class="major">
-					<h2>최적화된 프로세스 기반으로 비즈니스 관리 자동화 솔루션 제공<br />
-					DevOps + TestOps & AI Based</h2>
+					<div class="section-label">Our Solutions</div>
+					<h2>최적화된 프로세스 기반<br />
+					<span class="gradient-text">비즈니스 관리 자동화</span> 솔루션</h2>
+					<p class="section-subtitle">DevOps + TestOps + AI 기반의 통합 솔루션으로 개발부터 운영까지</p>
 				</header>
-				<ul class="icons major">
-					<li><span class="icon solid fa-camera-retro"><span class="label">Shoot</span></span></li>
-					<li><span class="icon solid fa-sync"><span class="label">Process</span></span></li>
-					<li><span class="icon solid fa-cloud"><span class="label">Upload</span></span></li>
-				</ul>
+				<div class="features-grid">
+					<div class="feature-card">
+						<div class="feature-icon">
+							<i class="fas fa-cogs"></i>
+						</div>
+						<h3>자동화</h3>
+						<p>반복적인 업무를 자동화하여 효율성 극대화</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">
+							<i class="fas fa-sync-alt"></i>
+						</div>
+						<h3>통합 관리</h3>
+						<p>개발부터 배포까지 통합된 프로세스 관리</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">
+							<i class="fas fa-cloud"></i>
+						</div>
+						<h3>클라우드 기반</h3>
+						<p>확장 가능한 클라우드 인프라 솔루션</p>
+					</div>
+				</div>
 			</section>
 
 		<!-- Two -->
 			<section id="two" class="wrapper">
+				<div class="section-header">
+					<div class="section-label">Core Technologies</div>
+					<h2>핵심 기술 영역</h2>
+				</div>
 				<div class="inner alt">
 					<section class="spotlight">
 						<div class="image"><img src="images/devops for agriculture.jpg" alt="" /></div>
 						<div class="content">
-							<h3>DevOps</h3>
-							<p><ul>
-								<li>l 솔루션 기반 업무 자동화 환경 구축</li>
-								<li>l DevOps, ITSM, ALM, PLM</li>
-								<li>l Plugin 개발 : Atlassian Marketplace</li>
-								<li>l Jira Sync + Test Automation 등</li>
-								</ul></p>
+							<div class="tech-label">Development & Operations</div>
+							<h3>DevOps 솔루션</h3>
+							<div class="feature-list">
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>솔루션 기반 업무 자동화 환경 구축</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>DevOps, ITSM, ALM, PLM 통합</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>Atlassian Marketplace Plugin 개발</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>Jira Sync + Test Automation</span>
+								</div>
+							</div>
 						</div>
 					</section>
 					<section class="spotlight">
 						<div class="image"><img src="images/TestOps.jpeg" alt="" /></div>
 						<div class="content">
-							<h3>TestOps</h3>
-							<p><ul>							
-							<li style="text-align: left;">l Test Manage &amp; Automation + CICD</li>
-							<li style="text-align: left;">l All In One for Test Activities</li>
-							<li style="text-align: left;">l BDD 방법론 테스트 솔루션 개발</li>
-							<li style="text-align: left;">l 비개발자의 접근성을 최적화</li>
-							<li style="text-align: left;">l Memorized Action Tracking Test</li>
-							</ul></p>
+							<div class="tech-label">Test Operations</div>
+							<h3>TestOps 플랫폼</h3>
+							<div class="feature-list">
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>Test Management & Automation + CI/CD</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>All-in-One 테스트 활동 플랫폼</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>BDD 방법론 테스트 솔루션</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>비개발자 친화적 접근성</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>Memorized Action Tracking Test</span>
+								</div>
+							</div>
 						</div>
 					</section>
 					<section class="spotlight">
 						<div class="image"><img src="images/ai_devops.png" alt="" /></div>
 						<div class="content">
-							<h3>AI Based Solution</h3>
-							<p><ul>
-							<li>l AI 음성인식 및 테스트 자동화</li>
-							<li>l BDD 방식의 솔루션과 접목</li>
-							<li>l 스마트 팜 농작물 병충해 판독</li>
-							<li>l 누구나 쉽게 접근 가능한 AI 솔루션</li>
-							</ul></p>
+							<div class="tech-label">Artificial Intelligence</div>
+							<h3>AI 기반 솔루션</h3>
+							<div class="feature-list">
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>AI 음성인식 및 테스트 자동화</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>BDD 방식 솔루션 통합</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>스마트 팜 농작물 병충해 AI 판독</span>
+								</div>
+								<div class="feature-item">
+									<i class="fas fa-check-circle"></i>
+									<span>사용자 친화적 AI 솔루션</span>
+								</div>
+							</div>
 						</div>
 					</section>
-					<section class="special">
-						<ul class="icons labeled">
-							<li><span class="icon solid fa-camera-retro"><span class="label">AI Based Detecting</span></span></li>
-							<li><span class="icon solid fa-sync"><span class="label">Reusable Automated Cases</span></span></li>
-							<li><span class="icon solid fa-cloud"><span class="label">Cloud Based Env.</span></span></li>
-							<li><span class="icon solid fa-code"><span class="label">App solution Dev.</span></span></li>
-							<li><span class="icon solid fa-desktop"><span class="label">Dashboard & Monitor</span></span></li>							
-						</ul>
+					<section class="capabilities-section">
+						<h3>핵심 역량</h3>
+						<div class="capabilities-grid">
+							<div class="capability-item">
+								<i class="fas fa-eye"></i>
+								<span>AI 기반 탐지</span>
+							</div>
+							<div class="capability-item">
+								<i class="fas fa-recycle"></i>
+								<span>재사용 가능한 자동화</span>
+							</div>
+							<div class="capability-item">
+								<i class="fas fa-cloud"></i>
+								<span>클라우드 환경</span>
+							</div>
+							<div class="capability-item">
+								<i class="fas fa-code"></i>
+								<span>앱 솔루션 개발</span>
+							</div>
+							<div class="capability-item">
+								<i class="fas fa-chart-line"></i>
+								<span>대시보드 & 모니터링</span>
+							</div>
+						</div>
 					</section>
 				</div>
 			</section>
 
 		<!-- Three -->
 			<section id="three" class="wrapper style2 special">
+				<div class="section-header">
+					<div class="section-label">About KND Solution</div>
+					<h2>회사 소개</h2>
+				</div>
 				<header class="major">
-					<h2>Company Introduction</h2>
-					<p><ul>						
-						<li style="text-align: left;">개발자 중심의 DevOps 환경을 다양한 도구로 구현하여 최적화 된 업무 환경을 구축 및 유지</li>
-						<li style="text-align: left;">프로젝트 요구사항 관리에서 소스품질 및 배포까지 통합된 개발환경 제공</li>
-						<li style="text-align: left;">고객의 제품에 맞춘 테스트 자동화 솔루션 환경 제공</li>
-						</ul>	
-						<div class="image main" data-position="center">
-						<img src="images/overview_1.png" alt="" />
+					<div class="company-values">
+						<div class="value-item">
+							<div class="value-icon">
+								<i class="fas fa-tools"></i>
+							</div>
+							<h4>최적화된 개발환경</h4>
+							<p>개발자 중심의 DevOps 환경을 다양한 도구로 구현하여 최적화된 업무 환경을 구축 및 유지</p>
 						</div>
-					</ul></p>
+						<div class="value-item">
+							<div class="value-icon">
+								<i class="fas fa-project-diagram"></i>
+							</div>
+							<h4>통합 개발환경</h4>
+							<p>프로젝트 요구사항 관리에서 소스품질 및 배포까지 통합된 개발환경 제공</p>
+						</div>
+						<div class="value-item">
+							<div class="value-icon">
+								<i class="fas fa-robot"></i>
+							</div>
+							<h4>맞춤형 자동화</h4>
+							<p>고객의 제품에 맞춘 테스트 자동화 솔루션 환경 제공</p>
+						</div>
+					</div>
 				</header>
-				<div class="image main" data-position="center">
-									<img src="images/history.png" alt="" />
-								</div>
-				<div class="image main" data-position="center">
-									<img src="images/devops_pros.png" alt="" />
-								</div>
-				<div class="image main" data-position="center">
-									<img src="images/knd_biz.jpg" alt="" />
-								</div>
+				
+				<div class="company-showcase">
+					<div class="showcase-item">
+						<h4>회사 개요</h4>
+						<div class="image main" data-position="center">
+							<img src="images/overview_1.png" alt="Company Overview" />
+						</div>
+					</div>
+					<div class="showcase-item">
+						<h4>회사 연혁</h4>
+						<div class="image main" data-position="center">
+							<img src="images/history.png" alt="Company History" />
+						</div>
+					</div>
+					<div class="showcase-item">
+						<h4>DevOps 전문성</h4>
+						<div class="image main" data-position="center">
+							<img src="images/devops_pros.png" alt="DevOps Expertise" />
+						</div>
+					</div>
+					<div class="showcase-item">
+						<h4>비즈니스 영역</h4>
+						<div class="image main" data-position="center">
+							<img src="images/knd_biz.jpg" alt="Business Areas" />
+						</div>
+					</div>
+				</div>
+				
 				<ul class="actions special">
-					<li><a href="#" class="button primary icon solid fa-download">Intro Download</a></li>
-					<li><a href="#" class="button">Learn More</a></li>
+					<li><a href="#" class="button primary icon solid fa-download">회사소개서 다운로드</a></li>
+					<li><a href="mailto:tedkim@kndsolution.co.kr" class="button secondary icon solid fa-envelope">문의하기</a></li>
 				</ul>
 			</section>
-
-		<!-- Four -->
-		<!--
-			<section id="four" class="wrapper">
-				<div class="inner">
-
-					<header class="major">
-						<h2>Elements</h2>
-					</header>
-
-					<section>
-						<h4>Text</h4>
-						<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
-						This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
-						This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
-						<hr />
-						<header>
-							<h4>Heading with a Subtitle</h4>
-							<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
-						</header>
-						<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-						<header>
-							<h5>Heading with a Subtitle</h5>
-							<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
-						</header>
-						<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-						<hr />
-						<h2>Heading Level 2</h2>
-						<h3>Heading Level 3</h3>
-						<h4>Heading Level 4</h4>
-						<h5>Heading Level 5</h5>
-						<h6>Heading Level 6</h6>
-						<hr />
-						<h5>Blockquote</h5>
-						<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
-						<h5>Preformatted</h5>
-						<pre><code>i = 0;
-
-while (!deck.isInOrder()) {
-  print 'Iteration ' + i;
-  deck.shuffle();
-  i++;
-}
-
-print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
-					</section>
-
-					<section>
-						<h4>Lists</h4>
-						<div class="row">
-							<div class="col-6 col-12-medium">
-								<h5>Unordered</h5>
-								<ul>
-									<li>Dolor pulvinar etiam.</li>
-									<li>Sagittis adipiscing.</li>
-									<li>Felis enim feugiat.</li>
-								</ul>
-								<h5>Alternate</h5>
-								<ul class="alt">
-									<li>Dolor pulvinar etiam.</li>
-									<li>Sagittis adipiscing.</li>
-									<li>Felis enim feugiat.</li>
-								</ul>
-							</div>
-							<div class="col-6 col-12-medium">
-								<h5>Ordered</h5>
-								<ol>
-									<li>Dolor pulvinar etiam.</li>
-									<li>Etiam vel felis viverra.</li>
-									<li>Felis enim feugiat.</li>
-									<li>Dolor pulvinar etiam.</li>
-									<li>Etiam vel felis lorem.</li>
-									<li>Felis enim et feugiat.</li>
-								</ol>
-								<h5>Icons</h5>
-								<ul class="icons">
-									<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-								</ul>
-							</div>
-						</div>
-						<h5>Actions</h5>
-						<div class="row">
-							<div class="col-6 col-12-medium">
-								<ul class="actions">
-									<li><a href="#" class="button primary">Default</a></li>
-									<li><a href="#" class="button">Default</a></li>
-								</ul>
-								<ul class="actions small">
-									<li><a href="#" class="button primary small">Small</a></li>
-									<li><a href="#" class="button small">Small</a></li>
-								</ul>
-								<ul class="actions stacked">
-									<li><a href="#" class="button primary">Default</a></li>
-									<li><a href="#" class="button">Default</a></li>
-								</ul>
-								<ul class="actions stacked">
-									<li><a href="#" class="button primary small">Small</a></li>
-									<li><a href="#" class="button small">Small</a></li>
-								</ul>
-							</div>
-							<div class="col-6 col-12-medium">
-								<ul class="actions stacked">
-									<li><a href="#" class="button primary fit">Default</a></li>
-									<li><a href="#" class="button fit">Default</a></li>
-								</ul>
-								<ul class="actions stacked">
-									<li><a href="#" class="button primary small fit">Small</a></li>
-									<li><a href="#" class="button small fit">Small</a></li>
-								</ul>
-							</div>
-						</div>
-					</section>
-
-					<section>
-						<h4>Table</h4>
-						<h5>Default</h5>
-						<div class="table-wrapper">
-							<table>
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Description</th>
-										<th>Price</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Item One</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>29.99</td>
-									</tr>
-									<tr>
-										<td>Item Two</td>
-										<td>Vis ac commodo adipiscing arcu aliquet.</td>
-										<td>19.99</td>
-									</tr>
-									<tr>
-										<td>Item Three</td>
-										<td> Morbi faucibus arcu accumsan lorem.</td>
-										<td>29.99</td>
-									</tr>
-									<tr>
-										<td>Item Four</td>
-										<td>Vitae integer tempus condimentum.</td>
-										<td>19.99</td>
-									</tr>
-									<tr>
-										<td>Item Five</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>29.99</td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="2"></td>
-										<td>100.00</td>
-									</tr>
-								</tfoot>
-							</table>
-						</div>
-
-						<h5>Alternate</h5>
-						<div class="table-wrapper">
-							<table class="alt">
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Description</th>
-										<th>Price</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Item One</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>29.99</td>
-									</tr>
-									<tr>
-										<td>Item Two</td>
-										<td>Vis ac commodo adipiscing arcu aliquet.</td>
-										<td>19.99</td>
-									</tr>
-									<tr>
-										<td>Item Three</td>
-										<td> Morbi faucibus arcu accumsan lorem.</td>
-										<td>29.99</td>
-									</tr>
-									<tr>
-										<td>Item Four</td>
-										<td>Vitae integer tempus condimentum.</td>
-										<td>19.99</td>
-									</tr>
-									<tr>
-										<td>Item Five</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>29.99</td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="2"></td>
-										<td>100.00</td>
-									</tr>
-								</tfoot>
-							</table>
-						</div>
-					</section>
-
-					<section>
-						<h4>Buttons</h4>
-						<ul class="actions">
-							<li><a href="#" class="button primary">Primary</a></li>
-							<li><a href="#" class="button">Default</a></li>
-						</ul>
-						<ul class="actions">
-							<li><a href="#" class="button large">Large</a></li>
-							<li><a href="#" class="button">Default</a></li>
-							<li><a href="#" class="button small">Small</a></li>
-						</ul>
-						<ul class="actions fit">
-							<li><a href="#" class="button fit">Fit</a></li>
-							<li><a href="#" class="button primary fit">Fit</a></li>
-							<li><a href="#" class="button fit">Fit</a></li>
-						</ul>
-						<ul class="actions fit small">
-							<li><a href="#" class="button primary fit small">Fit + Small</a></li>
-							<li><a href="#" class="button fit small">Fit + Small</a></li>
-							<li><a href="#" class="button primary fit small">Fit + Small</a></li>
-						</ul>
-						<ul class="actions">
-							<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
-							<li><a href="#" class="button icon solid fa-download">Icon</a></li>
-						</ul>
-						<ul class="actions">
-							<li><span class="button primary disabled">Disabled</span></li>
-							<li><span class="button disabled">Disabled</span></li>
-						</ul>
-					</section>
-
-					<section>
-						<h4>Form</h4>
-						<form method="post" action="#">
-							<div class="row gtr-uniform">
-								<div class="col-6 col-12-xsmall">
-									<input type="text" name="demo-name" id="demo-name" value="" placeholder="Name" />
-								</div>
-								<div class="col-6 col-12-xsmall">
-									<input type="email" name="demo-email" id="demo-email" value="" placeholder="Email" />
-								</div>
-								<div class="col-12">
-									<select name="demo-category" id="demo-category">
-										<option value="">- Category -</option>
-										<option value="1">Manufacturing</option>
-										<option value="1">Shipping</option>
-										<option value="1">Administration</option>
-										<option value="1">Human Resources</option>
-									</select>
-								</div>
-								<div class="col-4 col-12-small">
-									<input type="radio" id="demo-priority-low" name="demo-priority" checked>
-									<label for="demo-priority-low">Low</label>
-								</div>
-								<div class="col-4 col-12-small">
-									<input type="radio" id="demo-priority-normal" name="demo-priority">
-									<label for="demo-priority-normal">Normal</label>
-								</div>
-								<div class="col-4 col-12-small">
-									<input type="radio" id="demo-priority-high" name="demo-priority">
-									<label for="demo-priority-high">High</label>
-								</div>
-								<div class="col-6 col-12-small">
-									<input type="checkbox" id="demo-copy" name="demo-copy">
-									<label for="demo-copy">Email me a copy</label>
-								</div>
-								<div class="col-6 col-12-small">
-									<input type="checkbox" id="demo-human" name="demo-human" checked>
-									<label for="demo-human">Not a robot</label>
-								</div>
-								<div class="col-12">
-									<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
-								</div>
-								<div class="col-12">
-									<ul class="actions">
-										<li><input type="submit" value="Send Message" class="primary" /></li>
-										<li><input type="reset" value="Reset" /></li>
-									</ul>
-								</div>
-							</div>
-						</form>
-					</section>
-
-					<section>
-						<h4>Image</h4>
-						<h5>Fit</h5>
-						<div class="box alt">
-							<div class="row gtr-uniform">
-								<div class="col-12"><span class="image fit"><img src="images/pic04.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic03.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
-								<div class="col-4"><span class="image fit"><img src="images/pic02.jpg" alt="" /></span></div>
-							</div>
-						</div>
-						<h5>Left &amp; Right</h5>
-						<p><span class="image left"><img src="images/pic05.jpg" alt="" /></span>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
-						<p><span class="image right"><img src="images/pic05.jpg" alt="" /></span>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
-					</section>
-
-				</div>
-			</section>
-		-->
 
 		<!-- Footer -->
 			<footer id="footer">
-				<ul class="icons">
-					<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-					<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-					<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-				</ul>
-					<p>Email:<a href="mailto:tedkim@kndsolution.co.kr">tedkim@kndsolution.co.kr</a></p>
-					<p>Website:"<a href="http://kndsolution.co.kr">KND Solution</a>"</p>
-					
+				<div class="footer-content">
+					<div class="footer-section">
+						<h4>KND Solution</h4>
+						<p>Knowledge & Development<br />혁신적인 개발 솔루션 파트너</p>
+					</div>
+					<div class="footer-section">
+						<h4>연락처</h4>
+						<p>
+							<i class="fas fa-envelope"></i>
+							<a href="mailto:tedkim@kndsolution.co.kr">tedkim@kndsolution.co.kr</a>
+						</p>
+						<p>
+							<i class="fas fa-globe"></i>
+							<a href="http://kndsolution.co.kr">kndsolution.co.kr</a>
+						</p>
+					</div>
+					<div class="footer-section">
+						<h4>소셜 미디어</h4>
+						<ul class="social-icons">
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="mailto:tedkim@kndsolution.co.kr" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer-bottom">
+					<p>&copy; 2024 KND Solution. All rights reserved.</p>
+				</div>
 			</footer>
 
 		<!-- Scripts -->
@@ -459,6 +291,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/custom.js"></script>
 
 	</body>
 </html>
