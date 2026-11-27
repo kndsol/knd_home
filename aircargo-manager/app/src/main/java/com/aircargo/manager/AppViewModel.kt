@@ -86,7 +86,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         serviceKey = scheduleRepo.serviceKey
     }
 
-    var scheduleSource by mutableStateOf(ScheduleSource.PAX_DAILY)
+    var scheduleSource by mutableStateOf(ScheduleSource.PAX)
     var direction by mutableStateOf(Direction.DEPARTURE)
     var flights by mutableStateOf<List<Flight>>(emptyList())
         private set

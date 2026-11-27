@@ -15,21 +15,18 @@ import java.util.Locale
 enum class Direction(val label: String) { DEPARTURE("출발"), ARRIVAL("도착") }
 
 /**
- * 인천공항 공공데이터(data.go.kr, 인천국제공항공사 B551177) 조회 대상.
- * 활용신청 후 발급받은 serviceKey 필요.
+ * 인천공항 공공데이터(data.go.kr) — 인천국제공항공사_항공기 운항 현황 상세 조회 (statusOfAllFltDeOdp)
+ * - 조회 범위: 조회일 기준 D-3 ~ D+6, 여객기(P)/화물기(C) 구분
+ * - 활용신청 후 발급받은 serviceKey 필요 (개발계정 일 500건)
  */
-enum class ScheduleSource(val label: String, val desc: String) {
-    PAX_DAILY("일일 운항현황", "여객편(벨리카고) 당일 운항 · StatusOfPassengerFlightsDeOdp"),
-    CARGO_SEASON("화물기 정기편", "화물기 시즌 스케쥴 · StatusOfCgoFltSched");
+enum class ScheduleSource(val label: String, val desc: String, val code: String) {
+    PAX("여객편", "여객기(벨리카고) 운항현황 · statusOfAllFltDeOdp", "P"),
+    CARGO("화물기", "화물기 운항현황 · statusOfAllFltDeOdp", "C");
 
-    fun url(direction: Direction): String = when (this) {
-        PAX_DAILY -> BASE + "StatusOfPassengerFlightsDeOdp/" +
-            if (direction == Direction.DEPARTURE) "getPassengerDeparturesDeOdp" else "getPassengerArrivalsDeOdp"
-        CARGO_SEASON -> BASE + "StatusOfCgoFltSched/" +
-            if (direction == Direction.DEPARTURE) "getCgoFltSchedDeparturesDeOdp" else "getCgoFltSchedArrivalsDeOdp"
-    }
+    fun url(direction: Direction): String = BASE +
+        if (direction == Direction.DEPARTURE) "getFltDeparturesDeOdp" else "getFltArrivalsDeOdp"
 
-    private companion object { const val BASE = "https://apis.data.go.kr/B551177/" }
+    private companion object { const val BASE = "https://apis.data.go.kr/B551177/statusOfAllFltDeOdp/" }
 }
 
 data class Flight(
@@ -52,14 +49,15 @@ class ScheduleRepository(context: Context) {
         get() = prefs.getString("serviceKey", "") ?: ""
         set(v) = prefs.edit().putString("serviceKey", v.trim()).apply()
 
-    suspend fun fetch(source: ScheduleSource, direction: Direction): List<Flight> =
+    suspend fun fetch(source: ScheduleSource, direction: Direction, date: String = todayYmd()): List<Flight> =
         withContext(Dispatchers.IO) {
             val key = serviceKey
             require(key.isNotBlank()) { "서비스키 미설정" }
             // 포털의 Encoding 키(% 포함)는 그대로, Decoding 키는 인코딩 후 사용
             val encKey = if (key.contains('%')) key else URLEncoder.encode(key, "UTF-8")
             val url = source.url(direction) +
-                "?serviceKey=$encKey&pageNo=1&numOfRows=1000&type=json&lang=K"
+                "?serviceKey=$encKey&pageNo=1&numOfRows=1000&type=json" +
+                "&searchdtCode=S&searchDate=$date&searchFrom=0000&searchTo=2400&passengerOrCargo=${source.code}"
 
             val conn = (URL(url).openConnection() as HttpURLConnection).apply {
                 connectTimeout = 10_000
@@ -134,8 +132,8 @@ class ScheduleRepository(context: Context) {
         val extra = listOf(
             if (days.isNotBlank()) "운항 $days" else "",
             period,
-            f.get("gatenumber", "gate").let { if (it.isNotBlank()) "Gate $it" else "" },
-            f.get("terminalid", "terminal"),
+            f.get("gateNumber", "gatenumber", "gate").let { if (it.isNotBlank()) "Gate $it" else "" },
+            f.get("terminalId", "terminalid", "terminal"),
         ).filter { it.isNotBlank() }.joinToString(" · ")
 
         return Flight(
@@ -144,9 +142,9 @@ class ScheduleRepository(context: Context) {
             airport = f.get("airport", "airportNm", "airportName",
                 if (direction == Direction.DEPARTURE) "arrivedKor" else "boardingKor"),
             airportCode = f.get("airportCode", "airportcode", "cityCode"),
-            scheduleTime = fmtTime(f.get("scheduleDateTime", "scheduledatetime", "st", "std", "scheduleTime")),
-            estimatedTime = fmtTime(f.get("estimatedDateTime", "estimateddatetime", "etd", "eta")),
-            status = f.get("remark", "status", "flightStatus"),
+            scheduleTime = fmtTime(f.get("scheduleDatetime", "scheduleDateTime", "scheduletime", "st", "std", "scheduleTime")),
+            estimatedTime = fmtTime(f.get("estimatedDatetime", "estimatedDateTime", "changeDatetime", "etd", "eta")),
+            status = f.get("remark", "status", "flightStatus", "fltStatus"),
             extra = extra,
         )
     }
@@ -164,6 +162,8 @@ class ScheduleRepository(context: Context) {
         val d = raw.filter { it.isDigit() }
         return if (d.length >= 8) "${d.substring(0, 4)}-${d.substring(4, 6)}-${d.substring(6, 8)}" else raw
     }
+
+    private fun todayYmd(): String = SimpleDateFormat("yyyyMMdd", Locale.KOREA).format(Date())
 
     /** 서비스키 미설정 시 화면 확인용 예시 데이터 */
     fun sample(direction: Direction): List<Flight> {
