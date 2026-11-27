@@ -53,14 +53,14 @@
 - Gmail 일일 발송 한도 존재 (개인 계정 약 500통/일)
 
 ### 5.3 항공사 정보 (`data/Airlines.kt`)
-| 코드 | 항공사 | AWB Prefix | 화물 WEB |
+| 코드 | 항공사 | AWB Prefix | 화물추적 WEB |
 |---|---|---|---|
-| CI | 중화항공 | 297 | cargo.china-airlines.com |
-| UL | 스리랑칸항공 | 603 | srilankancargo.com |
-| WE | 파라타항공 | (미확인) | parataair.com |
-| M7 | MAS AIR (MASkargo) | 232 | maskargo.com 추적 페이지 |
+| CI | 중화항공 | 297 | cargo.china-airlines.com/ccnetv2/content/home/index.aspx |
+| UL | 스리랑칸항공 | 603 | srilankancargo.ibsplc.aero/icargoneoportal |
+| WE | 파라타항공 | (미확인) | paratacargotrack.netlify.app |
+| M7 | MAS AIR (MasAir) | 865 | www.masair.com/tracking |
 
-- WE Prefix, 각 항공사 추적 상세 URL → 항공사 GSA 확인 후 수정
+- WE Prefix → 항공사 확인 후 수정
 
 ## 6. 제약 사항 (Prototype)
 

@@ -97,7 +97,7 @@ fun HomeScreen(
 
                 HorizontalDivider(Modifier.padding(vertical = 16.dp))
 
-                SectionTitle("업무 메뉴")
+                SectionTitle("서비스 메뉴")
                 menus.chunked(3).forEach { row ->
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         row.forEach { m ->

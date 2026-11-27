@@ -31,75 +31,96 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.aircargo.manager.ui.components.SubScreen
 
-/** 외부 웹(인천공항·항공사 화물·Flightradar24) 공용 WebView 화면 */
+/** WebView 제어 핸들 (새로고침·외부 열기용) */
+class WebHandle {
+    var view: WebView? = null
+    fun reload() { view?.reload() }
+    fun currentUrl(fallback: String): String = view?.url ?: fallback
+}
+
+/**
+ * 화면 내장 WebView — url 변경 시 해당 주소 로드.
+ * 뒤로가기: 웹 히스토리 우선 처리.
+ */
 @SuppressLint("SetJavaScriptEnabled")
+@Composable
+fun EmbeddedWeb(url: String, modifier: Modifier = Modifier, handle: WebHandle = remember { WebHandle() }) {
+    var progress by remember { mutableIntStateOf(0) }
+    var canGoBack by remember { mutableStateOf(false) }
+    var loadedUrl by remember { mutableStateOf<String?>(null) }
+
+    BackHandler(enabled = canGoBack) { handle.view?.goBack() }
+
+    Box(modifier) {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = { ctx ->
+                WebView(ctx).apply {
+                    settings.javaScriptEnabled = true
+                    settings.domStorageEnabled = true
+                    settings.loadWithOverviewMode = true
+                    settings.useWideViewPort = true
+                    settings.builtInZoomControls = true
+                    settings.displayZoomControls = false
+                    webViewClient = object : WebViewClient() {
+                        override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                            val scheme = request.url.scheme.orEmpty()
+                            if (scheme == "http" || scheme == "https") return false
+                            return runCatching {
+                                ctx.startActivity(Intent(Intent.ACTION_VIEW, request.url))
+                                true
+                            }.getOrDefault(true)
+                        }
+
+                        override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
+                            canGoBack = view.canGoBack()
+                        }
+
+                        override fun onPageFinished(view: WebView, url: String?) {
+                            canGoBack = view.canGoBack()
+                        }
+                    }
+                    webChromeClient = object : WebChromeClient() {
+                        override fun onProgressChanged(view: WebView, newProgress: Int) {
+                            progress = newProgress
+                        }
+                    }
+                    handle.view = this
+                }
+            },
+            update = { v ->
+                if (loadedUrl != url) {
+                    loadedUrl = url
+                    v.loadUrl(url)
+                }
+            },
+            onRelease = { it.destroy(); handle.view = null },
+        )
+        if (progress in 1..99) {
+            LinearProgressIndicator(
+                progress = { progress / 100f },
+                modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter),
+            )
+        }
+    }
+}
+
+/** 외부 웹(인천공항·항공사 화물·Flightradar24) 공용 전체화면 */
 @Composable
 fun WebScreen(url: String, title: String, onBack: () -> Unit) {
     val context = LocalContext.current
-    var progress by remember { mutableIntStateOf(0) }
-    var canGoBack by remember { mutableStateOf(false) }
-    var webView by remember { mutableStateOf<WebView?>(null) }
-
-    BackHandler(enabled = canGoBack) { webView?.goBack() }
+    val handle = remember { WebHandle() }
 
     SubScreen(
         title = title.ifBlank { "WEB" },
         onBack = onBack,
         actions = {
-            IconButton(onClick = { webView?.reload() }) { Icon(Icons.Filled.Refresh, "새로고침") }
+            IconButton(onClick = { handle.reload() }) { Icon(Icons.Filled.Refresh, "새로고침") }
             IconButton(onClick = {
-                val current = webView?.url ?: url
-                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(current)))
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(handle.currentUrl(url))))
             }) { Icon(Icons.AutoMirrored.Filled.OpenInNew, "브라우저로 열기") }
         },
     ) { pad ->
-        Box(Modifier.padding(pad).fillMaxSize()) {
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { ctx ->
-                    WebView(ctx).apply {
-                        settings.javaScriptEnabled = true
-                        settings.domStorageEnabled = true
-                        settings.loadWithOverviewMode = true
-                        settings.useWideViewPort = true
-                        settings.builtInZoomControls = true
-                        settings.displayZoomControls = false
-                        webViewClient = object : WebViewClient() {
-                            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                                val scheme = request.url.scheme.orEmpty()
-                                if (scheme == "http" || scheme == "https") return false
-                                // tel:, mailto:, intent: 등은 외부 앱으로
-                                return runCatching {
-                                    ctx.startActivity(Intent(Intent.ACTION_VIEW, request.url))
-                                    true
-                                }.getOrDefault(true)
-                            }
-
-                            override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                                canGoBack = view.canGoBack()
-                            }
-
-                            override fun onPageFinished(view: WebView, url: String?) {
-                                canGoBack = view.canGoBack()
-                            }
-                        }
-                        webChromeClient = object : WebChromeClient() {
-                            override fun onProgressChanged(view: WebView, newProgress: Int) {
-                                progress = newProgress
-                            }
-                        }
-                        loadUrl(url)
-                        webView = this
-                    }
-                },
-                onRelease = { it.destroy() },
-            )
-            if (progress in 1..99) {
-                LinearProgressIndicator(
-                    progress = { progress / 100f },
-                    modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter),
-                )
-            }
-        }
+        EmbeddedWeb(url, Modifier.padding(pad).fillMaxSize(), handle)
     }
 }

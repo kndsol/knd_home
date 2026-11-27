@@ -111,7 +111,7 @@ fun SettingsScreen(vm: AppViewModel, onBack: () -> Unit, onNotify: () -> Unit) {
             Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(14.dp)) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     SectionTitle("앱 정보")
-                    Text("Air Cargo Manager v1.0.0 (Prototype)", fontSize = 13.sp)
+                    Text("Air Cargo Manager v1.2.0 (Prototype)", fontSize = 13.sp)
                     Text("로그인 계정: ${AppViewModel.LOGIN_ID} (고정)", fontSize = 13.sp)
                     Text("예약 데이터: 단말 내부 저장 (서버 미연동)", fontSize = 13.sp)
                 }

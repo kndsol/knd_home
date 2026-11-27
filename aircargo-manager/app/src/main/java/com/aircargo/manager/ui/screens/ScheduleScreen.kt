@@ -62,6 +62,8 @@ fun ScheduleScreen(
     onSettings: () -> Unit,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
+    // 키 미설정 시 인천공항 공식 운항정보(웹) 기본 표시
+    var webMode by rememberSaveable { mutableStateOf(vm.serviceKey.isBlank()) }
 
     LaunchedEffect(vm.scheduleSource, vm.direction, vm.serviceKey) { vm.loadSchedule() }
 
@@ -97,8 +99,14 @@ fun ScheduleScreen(
                             label = { Text(s.label) })
                     }
                 }
-                AirlineChips(vm.selectedAirline, { vm.selectedAirline = it })
-                OutlinedTextField(
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(selected = webMode, onClick = { webMode = true },
+                        label = { Text("인천공항 운항정보") })
+                    FilterChip(selected = !webMode, onClick = { webMode = false },
+                        label = { Text("API 목록") })
+                }
+                if (!webMode) AirlineChips(vm.selectedAirline, { vm.selectedAirline = it })
+                if (!webMode) OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
                     placeholder = { Text("편명 / 공항 검색") },
@@ -108,7 +116,20 @@ fun ScheduleScreen(
                 )
             }
 
-            vm.scheduleMessage?.let { msg ->
+            if (webMode) {
+                Text(
+                    "인천공항 공식 운항정보 화면" + if (vm.serviceKey.isBlank()) " · 설정에서 API 키 입력 시 'API 목록' 조회 가능" else "",
+                    fontSize = 11.sp, color = Color.Gray,
+                    modifier = Modifier.fillMaxWidth().background(Color(0xFFEDF1F6)).padding(horizontal = 12.dp, vertical = 4.dp),
+                )
+                EmbeddedWeb(
+                    ExternalLinks.icnWeb(
+                        cargo = vm.scheduleSource == ScheduleSource.CARGO,
+                        departure = vm.direction == Direction.DEPARTURE,
+                    ),
+                    Modifier.fillMaxSize(),
+                )
+            } else vm.scheduleMessage?.let { msg ->
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -125,7 +146,7 @@ fun ScheduleScreen(
                 }
             }
 
-            Box(Modifier.fillMaxSize()) {
+            if (!webMode) Box(Modifier.fillMaxSize()) {
                 if (vm.loading) {
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 } else {
