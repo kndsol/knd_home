@@ -74,6 +74,7 @@ fun BookingFormScreen(
     var company by rememberSaveable { mutableStateOf("") }
     var name by rememberSaveable { mutableStateOf("") }
     var phone by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
 
     var showErrors by rememberSaveable { mutableStateOf(false) }
     var confirm by rememberSaveable { mutableStateOf(false) }
@@ -90,6 +91,7 @@ fun BookingFormScreen(
         if (company.isBlank()) put("company", "회사명 입력")
         if (name.isBlank()) put("name", "예약자명 입력")
         if (phone.filter { it.isDigit() }.length < 9) put("phone", "연락처 확인")
+        if (email.isNotBlank() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) put("email", "이메일 형식 확인")
     }
     fun err(k: String): String? = if (showErrors) errors[k] else null
 
@@ -164,6 +166,8 @@ fun BookingFormScreen(
                 Field("예약자명", name, { name = it }, err("name"))
                 Field("예약자 전화번호", phone, { phone = it.filter { c -> c.isDigit() || c == '-' } }, err("phone"),
                     keyboard = KeyboardType.Phone)
+                Field("예약자 이메일 (접수 확인 메일 수신, 선택)", email, { email = it.trim() }, err("email"),
+                    keyboard = KeyboardType.Email)
             }
 
             Button(
@@ -199,6 +203,7 @@ fun BookingFormScreen(
             bookerCompany = company.trim(),
             bookerName = name.trim(),
             bookerPhone = phone.trim(),
+            bookerEmail = email.trim(),
         )
         AlertDialog(
             onDismissRequest = { confirm = false },

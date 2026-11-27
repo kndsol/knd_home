@@ -27,6 +27,7 @@ data class Booking(
     val bookerCompany: String,
     val bookerName: String,
     val bookerPhone: String,
+    val bookerEmail: String = "",   // 접수 확인 메일 수신 (선택)
     val status: String = STATUS_REQUESTED,
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
@@ -36,6 +37,7 @@ data class Booking(
         put("destination", destination); put("remark", remark)
         put("tempControl", tempControl); put("dryIce", dryIce)
         put("bookerCompany", bookerCompany); put("bookerName", bookerName); put("bookerPhone", bookerPhone)
+        put("bookerEmail", bookerEmail)
         put("status", status)
     }
 
@@ -55,7 +57,7 @@ data class Booking(
             appendLine("Dest.     : $destination")
             appendLine("특수취급  : $handling")
             appendLine("Remark    : ${remark.ifBlank { "-" }}")
-            appendLine("예약자    : $bookerCompany / $bookerName / $bookerPhone")
+            appendLine("예약자    : $bookerCompany / $bookerName / $bookerPhone" + if (bookerEmail.isNotBlank()) " / $bookerEmail" else "")
             append("접수일시  : ${formatDateTime(createdAt)}")
         }
     }
@@ -81,6 +83,7 @@ data class Booking(
             bookerCompany = o.optString("bookerCompany"),
             bookerName = o.optString("bookerName"),
             bookerPhone = o.optString("bookerPhone"),
+            bookerEmail = o.optString("bookerEmail"),
             status = o.optString("status", STATUS_REQUESTED),
         )
 

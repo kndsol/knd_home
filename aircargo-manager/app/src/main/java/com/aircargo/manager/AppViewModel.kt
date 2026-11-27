@@ -13,6 +13,8 @@ import com.aircargo.manager.data.BookingRepository
 import com.aircargo.manager.data.Direction
 import com.aircargo.manager.data.Flight
 import com.aircargo.manager.data.GmailSender
+import com.aircargo.manager.data.MailLog
+import com.aircargo.manager.data.diagnose
 import com.aircargo.manager.data.NotifyRepository
 import com.aircargo.manager.data.NotifySettings
 import com.aircargo.manager.data.ScheduleRepository
@@ -51,9 +53,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun addBooking(b: Booking) {
         bookings.add(0, b)
         bookingRepo.saveAll(bookings)
-        if (notifySettings.onBookingCreated) {
-            sendNotification("[화물예약 등록] ${b.flightNo} ${b.flightDate} ${b.id}", b.toShareText(), auto = true)
-        }
+        notifyBooking(MailLog.EV_CREATE, b)
     }
 
     fun updateStatus(id: String, status: String) {
@@ -62,13 +62,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             val updated = bookings[idx].copy(status = status)
             bookings[idx] = updated
             bookingRepo.saveAll(bookings)
-            if (notifySettings.onStatusChanged) {
-                sendNotification(
-                    "[화물예약 $status] ${updated.flightNo} ${updated.flightDate} ${updated.id}",
-                    "예약 상태가 '$status'(으)로 변경되었습니다.\n\n" + updated.toShareText(),
-                    auto = true,
-                )
-            }
+            notifyBooking(MailLog.EV_STATUS, updated)
         }
     }
 
@@ -135,6 +129,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     /** 최근 발송 결과 (화면 Toast 표시 후 consumeMailResult) */
     var mailResult by mutableStateOf<String?>(null)
         private set
+    val mailLogs = mutableStateListOf<MailLog>().apply { addAll(notifyRepo.loadLogs()) }
 
     fun saveNotify(s: NotifySettings) {
         notifyRepo.save(s)
@@ -143,28 +138,77 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     fun consumeMailResult() { mailResult = null }
 
-    fun sendTestMail() = sendNotification(
-        "[Air Cargo Manager] 알림 테스트",
-        "Gmail SMTP 알림 설정 테스트 메일입니다.\n발송일시: ${Booking.formatDateTime(System.currentTimeMillis())}",
-        auto = false,
-    )
+    fun clearMailLogs() {
+        mailLogs.clear()
+        notifyRepo.saveLogs(mailLogs)
+    }
 
-    /** auto=true : 이벤트 자동 알림 → 알림 비활성/미설정 시 무시 */
-    private fun sendNotification(subject: String, body: String, auto: Boolean) {
+    /** 이벤트별 수신자: 항공사 담당 + (등록 시) 예약자 */
+    private fun recipientsFor(event: String, b: Booking, s: NotifySettings): List<String> {
+        val list = s.recipients.filter { it.enabled && it.covers(b.airlineCode) }.map { it.email.trim() }.toMutableList()
+        if (event == MailLog.EV_CREATE && s.bookerConfirm && b.bookerEmail.isNotBlank()) list += b.bookerEmail.trim()
+        return list.distinctBy { it.lowercase() }
+    }
+
+    private fun notifyBooking(event: String, b: Booking) {
         val s = notifySettings
-        if (auto && (!s.enabled || !s.isConfigured)) return
+        if (!s.enabled) return
+        if (event == MailLog.EV_CREATE && !s.onBookingCreated) return
+        if (event == MailLog.EV_STATUS && !s.onStatusChanged) return
+        val tpl = if (event == MailLog.EV_CREATE) s.tplCreate else s.tplStatus
+        dispatch(event, b.id, recipientsFor(event, b, s), tpl.subjectFor(b), tpl.bodyFor(b))
+    }
+
+    fun sendTestMail() {
+        val s = notifySettings
+        dispatch(
+            MailLog.EV_TEST, "-",
+            s.recipients.filter { it.enabled }.map { it.email.trim() },
+            "[Air Cargo Manager] 알림 테스트",
+            "Gmail SMTP 알림 설정 테스트 메일입니다.\n발신: ${s.gmail}\n발송일시: ${Booking.formatDateTime(System.currentTimeMillis())}",
+        )
+    }
+
+    /** 실패 이력 재발송 — 원본 예약이 있으면 현재 양식·수신자로 재구성 */
+    fun retry(log: MailLog) {
+        val b = bookings.firstOrNull { it.id == log.bookingId }
+        if (log.event != MailLog.EV_TEST && b != null) {
+            val s = notifySettings
+            val tpl = if (log.event == MailLog.EV_CREATE) s.tplCreate else s.tplStatus
+            dispatch(log.event, b.id, recipientsFor(log.event, b, s), tpl.subjectFor(b), tpl.bodyFor(b))
+        } else {
+            dispatch(log.event, log.bookingId, log.to, log.subject, log.body)
+        }
+    }
+
+    private fun dispatch(event: String, bookingId: String, to: List<String>, subject: String, body: String) {
+        val s = notifySettings
+        val bad = diagnose(s).filter { !it.ok && !it.label.startsWith("활성 수신자") }
+        fun record(ok: Boolean, err: String) {
+            val log = MailLog(System.currentTimeMillis(), System.currentTimeMillis(), event, bookingId,
+                subject, body, to, ok, err)
+            mailLogs.add(0, log)
+            while (mailLogs.size > 100) mailLogs.removeAt(mailLogs.lastIndex)
+            notifyRepo.saveLogs(mailLogs)
+        }
+        if (bad.isNotEmpty() || to.isEmpty()) {
+            val err = if (to.isEmpty()) "해당 항공사 담당 수신자 없음" else bad.joinToString(", ") { it.label }
+            record(false, err)
+            mailResult = "메일 발송 실패: $err"
+            return
+        }
         mailSending = true
         viewModelScope.launch {
-            mailResult = runCatching { GmailSender.send(s, subject, body) }
-                .fold(
-                    onSuccess = { "알림 메일 발송 완료 (${it}명)" },
-                    onFailure = { e ->
-                        val m = e.message.orEmpty()
-                        if (m.contains("535") || m.contains("Username and Password", true))
-                            "메일 발송 실패: Gmail 인증 오류 — 2단계 인증 + 앱 비밀번호 확인"
-                        else "메일 발송 실패: ${m.take(150)}"
-                    },
-                )
+            runCatching { GmailSender.send(s, to, subject, body) }
+                .onSuccess {
+                    record(true, "")
+                    mailResult = "알림 메일 발송 완료 (${it}명)"
+                }
+                .onFailure { e ->
+                    val msg = GmailSender.explain(e)
+                    record(false, msg)
+                    mailResult = msg
+                }
             mailSending = false
         }
     }
