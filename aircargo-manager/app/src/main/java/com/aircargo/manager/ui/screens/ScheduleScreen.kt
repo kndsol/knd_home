@@ -118,7 +118,7 @@ fun ScheduleScreen(
 
             if (webMode) {
                 Text(
-                    "인천공항 공식 운항정보 화면" + if (vm.serviceKey.isBlank()) " · 설정에서 API 키 입력 시 'API 목록' 조회 가능" else "",
+                    "인천공항 공식 운항정보 화면" + if (vm.isAdmin && vm.serviceKey.isBlank()) " · 설정에서 API 키 입력 시 'API 목록' 조회 가능" else "",
                     fontSize = 11.sp, color = Color.Gray,
                     modifier = Modifier.fillMaxWidth().background(Color(0xFFEDF1F6)).padding(horizontal = 12.dp, vertical = 4.dp),
                 )
@@ -140,7 +140,7 @@ fun ScheduleScreen(
                     Icon(Icons.Filled.Info, null, tint = Color(0xFFB26A00))
                     Spacer(Modifier.width(6.dp))
                     Text(msg, fontSize = 12.sp, modifier = Modifier.weight(1f))
-                    if (vm.isSample || vm.serviceKey.isBlank()) {
+                    if (vm.isAdmin && (vm.isSample || vm.serviceKey.isBlank())) {
                         TextButton(onClick = onSettings) { Text("설정") }
                     }
                 }

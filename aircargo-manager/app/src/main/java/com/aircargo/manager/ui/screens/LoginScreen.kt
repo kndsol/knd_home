@@ -1,6 +1,9 @@
 package com.aircargo.manager.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -50,8 +53,10 @@ import com.aircargo.manager.ui.theme.NavyText
 @Composable
 fun LoginScreen(
     onLogin: (String, String) -> Boolean,
+    onCustomer: () -> Unit,
     onSuccess: () -> Unit,
 ) {
+    var admin by rememberSaveable { mutableStateOf(false) }
     var id by rememberSaveable { mutableStateOf("") }
     var pw by rememberSaveable { mutableStateOf("") }
     var showPw by rememberSaveable { mutableStateOf(false) }
@@ -83,40 +88,67 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("로그인", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                OutlinedTextField(
-                    value = id,
-                    onValueChange = { id = it; error = null },
-                    label = { Text("아이디") },
-                    leadingIcon = { Icon(Icons.Filled.Person, null) },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                OutlinedTextField(
-                    value = pw,
-                    onValueChange = { pw = it; error = null },
-                    label = { Text("비밀번호") },
-                    leadingIcon = { Icon(Icons.Filled.Lock, null) },
-                    trailingIcon = {
-                        IconButton(onClick = { showPw = !showPw }) {
-                            Icon(if (showPw) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, "비밀번호 표시")
+                // 고객 / 관리자 선택
+                Row(
+                    Modifier.fillMaxWidth().background(Color(0xFFEDF1F6), RoundedCornerShape(12.dp)).padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    listOf(false to "고객", true to "관리자").forEach { (isAdmin, label) ->
+                        val on = admin == isAdmin
+                        Box(
+                            Modifier.weight(1f).height(46.dp)
+                                .background(if (on) Navy else Color.Transparent, RoundedCornerShape(10.dp))
+                                .clickable { admin = isAdmin; error = null },
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(label, color = if (on) Color.White else Navy, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
-                    },
-                    singleLine = true,
-                    visualTransformation = if (showPw) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = { submit() }),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                error?.let { Text(it, color = MaterialTheme.colorScheme.error, fontSize = 13.sp) }
-                Button(
-                    onClick = { submit() },
-                    enabled = id.isNotBlank() && pw.isNotBlank(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Navy),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
-                ) { Text("로그인", fontSize = 16.sp, fontWeight = FontWeight.Bold) }
+                    }
+                }
+                if (!admin) {
+                    Text("계정 없이 이용", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text("운항 스케쥴 · 화물 예약 · 화물 추적 · 실시간 운항", fontSize = 13.sp, color = Color.Gray)
+                    Button(
+                        onClick = { onCustomer(); onSuccess() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Navy),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                    ) { Text("고객으로 시작", fontSize = 16.sp, fontWeight = FontWeight.Bold) }
+                } else {
+                    OutlinedTextField(
+                        value = id,
+                        onValueChange = { id = it; error = null },
+                        label = { Text("관리자 아이디") },
+                        leadingIcon = { Icon(Icons.Filled.Person, null) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    OutlinedTextField(
+                        value = pw,
+                        onValueChange = { pw = it; error = null },
+                        label = { Text("비밀번호") },
+                        leadingIcon = { Icon(Icons.Filled.Lock, null) },
+                        trailingIcon = {
+                            IconButton(onClick = { showPw = !showPw }) {
+                                Icon(if (showPw) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, "비밀번호 표시")
+                            }
+                        },
+                        singleLine = true,
+                        visualTransformation = if (showPw) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { submit() }),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    error?.let { Text(it, color = MaterialTheme.colorScheme.error, fontSize = 13.sp) }
+                    Button(
+                        onClick = { submit() },
+                        enabled = id.isNotBlank() && pw.isNotBlank(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Navy),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                    ) { Text("관리자 로그인", fontSize = 16.sp, fontWeight = FontWeight.Bold) }
+                }
             }
         }
         Spacer(Modifier.height(16.dp))

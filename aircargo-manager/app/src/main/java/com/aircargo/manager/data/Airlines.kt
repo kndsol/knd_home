@@ -52,6 +52,9 @@ object Airlines {
 
 /** 외부 연결 URL 모음 */
 object ExternalLinks {
+    /** 고객 예약 요청 메일 수신 주소 (회사 예약 담당 메일로 변경) */
+    const val BOOKING_EMAIL = ""
+
     /** 인천공항 운항정보 (API 키 미설정 시 대체 화면) */
     const val ICN_FLIGHT_WEB = "https://www.airport.kr/ap_ko/869/subview.do"
 

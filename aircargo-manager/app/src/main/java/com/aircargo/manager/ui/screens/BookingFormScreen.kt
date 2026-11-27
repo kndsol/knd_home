@@ -1,6 +1,8 @@
 package com.aircargo.manager.ui.screens
 
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +33,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import com.aircargo.manager.AppViewModel
 import com.aircargo.manager.data.Airlines
 import com.aircargo.manager.data.Booking
+import com.aircargo.manager.data.ExternalLinks
 import com.aircargo.manager.ui.components.AirlineChips
 import com.aircargo.manager.ui.components.SectionTitle
 import com.aircargo.manager.ui.components.SubScreen
@@ -78,6 +82,7 @@ fun BookingFormScreen(
 
     var showErrors by rememberSaveable { mutableStateOf(false) }
     var confirm by rememberSaveable { mutableStateOf(false) }
+    var doneBooking by remember { mutableStateOf<Booking?>(null) }
 
     val pcsVal = pcs.toIntOrNull()
     val weightVal = weight.toDoubleOrNull()
@@ -214,12 +219,38 @@ fun BookingFormScreen(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    vm.addBooking(draft.copy(id = vm.newBookingId(), createdAt = System.currentTimeMillis()))
+                    val b = draft.copy(id = vm.newBookingId(), createdAt = System.currentTimeMillis())
+                    vm.addBooking(b)
                     confirm = false
-                    onDone()
+                    if (vm.isAdmin) onDone() else doneBooking = b   // 고객: 완료 안내 후 예약 요청 메일 발송
                 }) { Text("등록") }
             },
             dismissButton = { TextButton(onClick = { confirm = false }) { Text("수정") } },
+        )
+    }
+
+    doneBooking?.let { b ->
+        AlertDialog(
+            onDismissRequest = {},
+            title = { Text("예약 요청 접수") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("예약번호 ${b.id}", fontWeight = FontWeight.Bold)
+                    Text("담당자에게 예약 요청 메일을 보내면 접수가 완료됩니다.", fontSize = 14.sp)
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + ExternalLinks.BOOKING_EMAIL)).apply {
+                        putExtra(Intent.EXTRA_SUBJECT, "[화물예약 요청] ${b.flightNo} ${b.flightDate} ${b.id}")
+                        putExtra(Intent.EXTRA_TEXT, b.toShareText())
+                    }
+                    runCatching { context.startActivity(intent) }
+                    doneBooking = null
+                    onDone()
+                }) { Text("메일로 예약 요청 보내기") }
+            },
+            dismissButton = { TextButton(onClick = { doneBooking = null; onDone() }) { Text("닫기") } },
         )
     }
 }

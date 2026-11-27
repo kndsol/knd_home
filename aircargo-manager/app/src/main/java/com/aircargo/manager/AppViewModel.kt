@@ -33,14 +33,24 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     // ── 로그인 ──────────────────────────────
     var loggedIn by mutableStateOf(false)
         private set
+    /** 관리자 여부 — 고객: 기본 기능만, 관리자: 전체 */
+    var isAdmin by mutableStateOf(false)
+        private set
 
     fun login(id: String, pw: String): Boolean {
         val ok = id.trim() == LOGIN_ID && pw == LOGIN_PW
         loggedIn = ok
+        isAdmin = ok
         return ok
     }
 
-    fun logout() { loggedIn = false }
+    /** 고객 이용 — 계정 없음 */
+    fun loginCustomer() {
+        loggedIn = true
+        isAdmin = false
+    }
+
+    fun logout() { loggedIn = false; isAdmin = false }
 
     // ── 공통 : 선택 항공사 (null = 전체) ──────
     var selectedAirline by mutableStateOf<Airline?>(null)

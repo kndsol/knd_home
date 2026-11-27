@@ -41,6 +41,12 @@ object Routes {
 
 fun NavHostController.openWeb(url: String, title: String) = navigate(Routes.web(url, title))
 
+/** 관리자 전용 화면 가드 — 고객 접근 시 즉시 되돌림 */
+@Composable
+private fun AdminOnly(vm: AppViewModel, onDenied: () -> Unit) {
+    LaunchedEffect(vm.isAdmin) { if (!vm.isAdmin) onDenied() }
+}
+
 @Composable
 fun AppNavHost() {
     val nav = rememberNavController()
@@ -59,6 +65,7 @@ fun AppNavHost() {
         composable(Routes.LOGIN) {
             LoginScreen(
                 onLogin = { id, pw -> vm.login(id, pw) },
+                onCustomer = { vm.loginCustomer() },
                 onSuccess = {
                     nav.navigate(Routes.HOME) { popUpTo(Routes.LOGIN) { inclusive = true } }
                 },
@@ -80,11 +87,13 @@ fun AppNavHost() {
         }
         composable(Routes.BOOKING) {
             BookingFormScreen(vm, onBack = { nav.popBackStack() }, onDone = {
-                nav.navigate(Routes.BOOKINGS) { popUpTo(Routes.HOME) }
+                if (vm.isAdmin) nav.navigate(Routes.BOOKINGS) { popUpTo(Routes.HOME) }
+                else nav.popBackStack(Routes.HOME, inclusive = false)
             })
         }
         composable(Routes.BOOKINGS) {
-            BookingListScreen(vm, onBack = { nav.popBackStack() },
+            AdminOnly(vm) { nav.popBackStack() }
+            if (vm.isAdmin) BookingListScreen(vm, onBack = { nav.popBackStack() },
                 onNew = { nav.navigate(Routes.BOOKING) })
         }
         composable(Routes.TRACKING) {
@@ -94,10 +103,12 @@ fun AppNavHost() {
             LiveStatusScreen(vm, onBack = { nav.popBackStack() }, onOpenWeb = nav::openWeb)
         }
         composable(Routes.SETTINGS) {
-            SettingsScreen(vm, onBack = { nav.popBackStack() }, onNotify = { nav.navigate(Routes.NOTIFY) })
+            AdminOnly(vm) { nav.popBackStack() }
+            if (vm.isAdmin) SettingsScreen(vm, onBack = { nav.popBackStack() }, onNotify = { nav.navigate(Routes.NOTIFY) })
         }
         composable(Routes.NOTIFY) {
-            NotifySettingsScreen(vm, onBack = { nav.popBackStack() })
+            AdminOnly(vm) { nav.popBackStack() }
+            if (vm.isAdmin) NotifySettingsScreen(vm, onBack = { nav.popBackStack() })
         }
         composable(
             Routes.WEB,
