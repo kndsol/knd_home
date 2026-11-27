@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 단순 비행기 실루엣 (108dp 어댑티브 아이콘, 중앙 72dp 안전영역) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,30 C56,30 57.5,32 57.5,35 L57.5,48 L76,59 L76,64 L57.5,58 L57.5,70 L63,74 L63,78 L54,75.5 L45,78 L45,74 L50.5,70 L50.5,58 L32,64 L32,59 L50.5,48 L50.5,35 C50.5,32 52,30 54,30 Z" />
+</vector>
